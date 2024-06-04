@@ -1,29 +1,64 @@
-const baseURL = "http://localhost:3000/todos";
-export const getTodos = () => {
-  return fetch(baseURL).then((res) => res.json());
-};
-export const createTodo = (newTodo) => {
-  return fetch(baseURL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newTodo),
-  }).then((res) => res.json());
+let todos = [
+  { id: 1, content: "first todolist" },
+  { id: 2, content: "abc" },
+];
+
+const getTodos = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ data: [...todos] });
+    }, 500);
+  });
 };
 
-export const updateTodo = (id, partialTodo) => {
-  return fetch(baseURL + `/${id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(partialTodo),
-  }).then((res) => res.json());
+const addTodo = (newTodo) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const newId = todos.length
+        ? Math.max(...todos.map((todo) => todo.id)) + 1
+        : 1;
+      const newTodoWithId = { ...newTodo, id: newId };
+      const newTodos = [...todos, newTodoWithId];
+      todos = newTodos;
+      resolve({ data: newTodoWithId });
+    }, 500);
+  });
 };
 
-export const deleteTodo = (id) => {
-  return fetch(`${baseURL}/${id}`, { method: "DELETE" }).then((res) =>
-    res.json()
-  );
+const updateTodo = (id, partialTodo) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const index = todos.findIndex((todo) => todo.id === id);
+      if (index === -1) {
+        return reject(new Error("Todo not found"));
+      }
+      const updatedTodo = { ...todos[index], ...partialTodo };
+      const newTodos = [
+        ...todos.slice(0, index),
+        updatedTodo,
+        ...todos.slice(index + 1),
+      ];
+      todos = newTodos;
+      resolve({ data: updatedTodo });
+    }, 500);
+  });
 };
+
+const deleteTodo = (id) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const newTodos = todos.filter((todo) => todo.id !== id);
+      todos = newTodos;
+      resolve({ data: id });
+    }, 500);
+  });
+};
+
+const todoAPI = {
+  getTodos,
+  addTodo,
+  updateTodo,
+  deleteTodo,
+};
+
+export default todoAPI;

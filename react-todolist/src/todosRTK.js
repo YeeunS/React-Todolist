@@ -1,45 +1,29 @@
-// src/components/todosSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-const baseURL = "http://localhost:3000/todos";
+import todoAPI from "./APIs/todoAPIs";
 
 export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
-  const response = await fetch(baseURL);
-  return response.json();
+  const response = await todoAPI.getTodos();
+  return response.data;
 });
 
 export const createTodo = createAsyncThunk(
   "todos/createTodo",
   async (newTodo) => {
-    const response = await fetch(baseURL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newTodo),
-    });
-    return response.json();
+    const response = await todoAPI.addTodo(newTodo);
+    return response.data;
   }
 );
 
 export const updateTodo = createAsyncThunk(
   "todos/updateTodo",
   async ({ id, partialTodo }) => {
-    const response = await fetch(`${baseURL}/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(partialTodo),
-    });
-    return response.json();
+    const response = await todoAPI.updateTodo(id, partialTodo);
+    return response.data;
   }
 );
 
 export const deleteTodo = createAsyncThunk("todos/deleteTodo", async (id) => {
-  await fetch(`${baseURL}/${id}`, {
-    method: "DELETE",
-  });
+  await todoAPI.deleteTodo(id);
   return id;
 });
 
