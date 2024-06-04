@@ -8,7 +8,7 @@ const TodoList = () => {
   const todos = useSelector((state) => state.todos.items);
   const [input, setInput] = useState("");
   const [editId, setEditId] = useState(null);
-  const [editInput, setEditInput] = useState("");
+  const [changedInput, setChangedInput] = useState("");
 
   useEffect(() => {
     dispatch(fetchTodos());
@@ -35,14 +35,14 @@ const TodoList = () => {
       dispatch(
         updateTodo({
           id,
-          partialTodo: { content: editInput },
+          partialTodo: { content: changedInput },
         })
       );
       setEditId(null);
-      setEditInput("");
+      setChangedInput("");
     } else {
       setEditId(id);
-      setEditInput(content);
+      setChangedInput(content);
     }
   };
 
@@ -64,8 +64,8 @@ const TodoList = () => {
             {editId === todo.id ? (
               <input
                 type="text"
-                value={editInput}
-                onChange={(e) => setEditInput(e.target.value)}
+                value={changedInput}
+                onChange={(e) => setChangedInput(e.target.value)}
               />
             ) : (
               <span>{todo.content}</span>
