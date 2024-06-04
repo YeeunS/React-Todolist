@@ -3,7 +3,12 @@ let todos = [
   { id: 2, content: "abc" },
 ];
 
-const getTodos = () => {
+interface Todo {
+  id: number;
+  content: string;
+}
+
+const getTodos = (): Promise<{ data: Todo[] }> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({ data: [...todos] });
@@ -11,21 +16,23 @@ const getTodos = () => {
   });
 };
 
-const addTodo = (newTodo) => {
+const addTodo = (newTodo: Omit<Todo, "id">): Promise<{ data: Todo }> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       const newId = todos.length
         ? Math.max(...todos.map((todo) => todo.id)) + 1
         : 1;
       const newTodoWithId = { ...newTodo, id: newId };
-      const newTodos = [...todos, newTodoWithId];
-      todos = newTodos;
+      todos = [...todos, newTodoWithId];
       resolve({ data: newTodoWithId });
     }, 500);
   });
 };
 
-const updateTodo = (id, partialTodo) => {
+const updateTodo = (
+  id: number,
+  partialTodo: Partial<Todo>
+): Promise<{ data: Todo }> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const index = todos.findIndex((todo) => todo.id === id);
@@ -33,22 +40,20 @@ const updateTodo = (id, partialTodo) => {
         return reject(new Error("Todo not found"));
       }
       const updatedTodo = { ...todos[index], ...partialTodo };
-      const newTodos = [
+      todos = [
         ...todos.slice(0, index),
         updatedTodo,
         ...todos.slice(index + 1),
       ];
-      todos = newTodos;
       resolve({ data: updatedTodo });
     }, 500);
   });
 };
 
-const deleteTodo = (id) => {
+const deleteTodo = (id: number): Promise<{ data: number }> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      const newTodos = todos.filter((todo) => todo.id !== id);
-      todos = newTodos;
+      todos = todos.filter((todo) => todo.id !== id);
       resolve({ data: id });
     }, 500);
   });

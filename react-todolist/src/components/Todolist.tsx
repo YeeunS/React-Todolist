@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "./store";
 import { fetchTodos, createTodo, updateTodo, deleteTodo } from "../todosRTK";
 import "./todolist.css";
 
-const TodoList = () => {
-  const dispatch = useDispatch();
-  const todos = useSelector((state) => state.todos.items);
+const TodoList: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const todos = useSelector((state: RootState) => state.todos.items);
   const [input, setInput] = useState("");
-  const [editId, setEditId] = useState(null);
+  const [editId, setEditId] = useState<number | null>(null);
   const [changedInput, setChangedInput] = useState("");
 
   useEffect(() => {
     dispatch(fetchTodos());
   }, [dispatch]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim()) {
       dispatch(
@@ -26,11 +27,11 @@ const TodoList = () => {
     }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: number) => {
     dispatch(deleteTodo(id));
   };
 
-  const handleEdit = (id, content) => {
+  const handleEdit = (id: number, content: string) => {
     if (editId === id) {
       dispatch(
         updateTodo({
@@ -59,8 +60,6 @@ const TodoList = () => {
       <ul className="todo-list">
         {todos.map((todo) => (
           <li key={todo.id}>
-            {" "}
-            {/* each item has unique key */}
             {editId === todo.id ? (
               <input
                 type="text"
