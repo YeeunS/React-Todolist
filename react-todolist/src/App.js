@@ -1,10 +1,11 @@
-import logo from "./logo.svg";
-import "./App.css";
+// src/App.js
+import React from "react";
 import Todolist from "./components/Todolist";
+import "./App.css";
 
 function App() {
   return (
-    <div style={{ margin: "100px" }}>
+    <div className="App">
       <Todolist />
     </div>
   );
