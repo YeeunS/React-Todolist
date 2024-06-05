@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "./store";
-import { fetchTodos, createTodo, updateTodo, deleteTodo } from "../todosRTK";
+import { RootState, AppDispatch } from "../RTK/store";
+import {
+  fetchTodos,
+  createTodo,
+  updateTodo,
+  deleteTodo,
+} from "../RTK/todosRTK";
 import "./todolist.css";
 
 const TodoList: React.FC = () => {

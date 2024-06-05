@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import todoAPI from "./APIs/todoAPIs";
+import todoAPI from "../APIs/todoAPIs";
 
 interface Todo {
   id: number;
